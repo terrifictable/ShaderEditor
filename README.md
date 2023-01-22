@@ -6,6 +6,8 @@ its using [ImGui](https://github.com/ocornut/imgui)
 
 #### Folder structure
 shader_editor/
+- comp/
+  - *output of `make comp_libs`*
 - include/
     - glad
     - GLFW
@@ -18,6 +20,9 @@ shader_editor/
 - out/
   - glfw3.dll
   - roboto.ttf
-- comp/
-  - *output of `make comp_libs`*
-  
+- shaders/
+  - default.fsh
+  - default.vsh
+- src/
+  - glad.c
+  - *other files should already be there*

@@ -1,15 +1,15 @@
 #ifndef GUI_H
 #define GUI_H
 
-//#include <glad/glad.h>
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-//#include "../shader/Shader.h"
+//#include "../Shader/Shader.h"
 #include <iostream>
-
+#include "../shader/Shader.h"
 
 
 class Gui {
@@ -18,7 +18,6 @@ class Gui {
     GLFWwindow *window;
     const char* glsl_version;
     ImVec4 clear_color;
-
 
     int WIDTH;
     int HEIGHT;
