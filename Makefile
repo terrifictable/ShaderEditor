@@ -1,11 +1,11 @@
 COMPILER := g++
 STD 	 := c++20
-FLAGS 	 := -ggdb -Wall -Weffc++ -Wextra -Wsign-conversion -Werror
+FLAGS 	 := -ggdb -Wall -Weffc++ -Wextra -Werror
 INCLUDE  := -Iinclude/
 LIB 	 := -Llib/
 LIBS 	 := -lglfw3dll -lopengl32
 
-SRC := comp/*.o src/*.cpp src/glad.c
+SRC := comp/*.o src/*.cpp src/**/*.cpp
 
 
 test: compile run clean
@@ -17,7 +17,8 @@ compile:
 
 comp_libs:
 	@-mkdir comp
-	-$(COMPILER) -c --std=$(STD) $(INCLDUE) $(LIB) include/imgui/*.cpp $(LIBS)
+	-$(COMPILER) -c --std=$(STD) $(INCLUDE) $(LIB) src/glad.c $(LIBS)
+	-$(COMPILER) -c --std=$(STD) $(INCLUDE) $(LIB) include/imgui/*.cpp $(LIBS)
 	mv *.o comp/
 
 run:

@@ -1,19 +1,19 @@
 #include <imgui/imgui.h>
 #include <iostream>
 
-#include "gui.h"
+
+#include "gui/Gui.h"
 
 int main() {
-    std::cout << "Hello World!" << std::endl;
+    Gui gui{1920, 1080};
 
-    gui::SetupOpenGl();
-    gui::CreateOpenGlWindow("Hello World!");
+    gui.SetupOpenGl();
+    gui.CreateOpenGlWindow("Hello World!");
 
-    gui::CreateImGui();
-    gui::BeginRenderer();
+    gui.CreateImGui();
+    gui.BeginRenderer();
 
-    gui::DestroyImGui();
-    gui::DestroyOpenGlWindow();
+    // Automatically destroy imgui and opengl window using class destructor
 
     return 0;
 }
