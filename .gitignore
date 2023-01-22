@@ -8,3 +8,6 @@ lib/
 # CMakeLists doesnt work, may fix it later
 CMakeLists.txt
 
+# glad.c, you should get this from https://glad.dav1d.de/
+src/glad.c
+
