@@ -1,0 +1,10 @@
+include/
+comp/
+cmake-build-debug/
+lib/
+**/*.exe
+**/*.dll
+
+# CMakeLists doesnt work, may fix it later
+CMakeLists.txt
+
