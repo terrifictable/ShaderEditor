@@ -1,15 +1,14 @@
 #ifndef GUI_H
 #define GUI_H
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-
-#include <iostream>
+//#include <glad/glad.h>
 #include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
+#include <GLFW/glfw3.h>
 
-#include "../shader/Shader.h"
+//#include "../shader/Shader.h"
+#include <iostream>
 
 
 
@@ -24,13 +23,11 @@ class Gui {
     int WIDTH;
     int HEIGHT;
 
-    static void FramebufferSizeCallback(GLFWwindow *window, int width, int height);
 
 public:
     Gui(int width, int height);
     ~Gui();
 
-//    void GlfwErrorCallback(int error, const char* description);
     void SetupOpenGl();
 
     void CreateOpenGlWindow(const char* name);

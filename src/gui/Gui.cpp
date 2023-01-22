@@ -26,7 +26,7 @@ void Gui::SetupOpenGl() {
 
     Gui::glsl_version = "#version 130";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 //    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 }
@@ -95,7 +95,6 @@ void Gui::DestroyImGui() noexcept {
 
 void Gui::BeginRenderer() noexcept {
     clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-//    Shader shader("shaders/default.vsh", "shaders/default.fsh");
 
     while (!glfwWindowShouldClose(Gui::window) && !exit) {
         glfwPollEvents();
@@ -107,9 +106,6 @@ void Gui::BeginRenderer() noexcept {
         glfwGetFramebufferSize(window, &display_w, &display_h);
 //        ImGui::SetNextWindowSize(ImVec2(display_w, display_h));
 //        ImGui::SetNextWindowPos(ImVec2(0, 0));
-
-//        shader.use();
-//        shader.setFloat("u_time", glfwGetTime());
 
 
         Gui::Render();
@@ -146,4 +142,3 @@ void Gui::Render() noexcept {
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
     ImGui::End();
 }
-

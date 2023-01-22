@@ -32,4 +32,3 @@ clean:
 clean_all:
 	@echo ""
 	rm -rd out
-

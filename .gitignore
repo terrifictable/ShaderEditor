@@ -4,7 +4,8 @@ cmake-build-debug/
 lib/
 **/*.exe
 **/*.dll
-zep/
+
+*_old/
 
 # CMakeLists doesnt work, may fix it later
 CMakeLists.txt
