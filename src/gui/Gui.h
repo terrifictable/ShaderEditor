@@ -9,6 +9,7 @@
 
 #include "../OpenGL/Shader/Shader.h"
 #include "../imgui/TextEditor.h"
+#include "../OpenGL/Shape/Shapes/Rectangle.h"
 
 #include <iostream>
 
@@ -20,8 +21,13 @@ class Gui {
     const char* glsl_version;
     ImVec4 clear_color;
 
-    TextEditor editor;
 
+    float tr_a, tr_b, tr_c;
+    float br_a, br_b, br_c;
+    float bl_a, bl_b, bl_c;
+    float tl_a, tl_b, tl_c;
+
+    TextEditor editor;
     Shader shader{};
 
     int WIDTH;

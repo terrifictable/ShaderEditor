@@ -1,8 +1,8 @@
 #include "Shapes/Rectangle.h"
-#include "../EBO/EBO.h"
 #include "GLFW/glfw3.h"
 
 
+Rectangle::Rectangle() = default;
 Rectangle::Rectangle(float top_left[], float top_right[], float bottom_left[], float bottom_right[]) {
     GLfloat vertices[] = {
             top_right[0],    top_right[1],    top_right[2],         top_right[3],    top_right[4],    top_right[5],
@@ -46,3 +46,4 @@ void Rectangle::Delete() {
     vbo.Delete();
     ebo.Delete();
 }
+

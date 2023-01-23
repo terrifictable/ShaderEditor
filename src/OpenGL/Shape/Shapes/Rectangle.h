@@ -10,6 +10,7 @@ public:
     VBO vbo;
     EBO ebo;
 
+    Rectangle();
     // x, y, w, h => -1.0 : 1.0
     Rectangle(float top_left[], float top_right[], float bottom_left[], float bottom_right[]);
 

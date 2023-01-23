@@ -1,11 +1,8 @@
 #include "Gui.h"
-#include "themes.h"
 
-#include "../OpenGL/VAO/VAO.h"
-#include "../OpenGL/EBO/EBO.h"
-#include "../OpenGL/Shape/Shapes/Rectangle.h"
-#include "../imgui/TextEditor.h"
+#include "themes.h"
 #include "../utils.h"
+
 
 #define DEBUG
 
@@ -130,13 +127,16 @@ void Gui::BeginRenderer() noexcept {
 
     editor.SetText(readFile("shaders/default.fsh"));
 
+    tr_a =  1.0f; tr_b =  1.0f; tr_c = 0.0f;
+    br_a =  1.0f; br_b = -1.0f; br_c = 0.0f;
+    bl_a = -1.0f; bl_b = -1.0f; bl_c = 0.0f;
+    tl_a = -1.0f; tl_b =  1.0f; tl_c = 0.0f;
 
-    float r_tr[] = {  1,  1, 0.0f,    1.0f,  0.0f, 0.25f };
-    float r_br[] = {  1, -1, 0.0f,    0.75f, 0.5f, 0.5f  };
-    float r_bl[] = { -1, -1, 0.0f,    0.5f,  1.0f, 0.65f };
-    float r_tl[] = { -1,  1, 0.0f,    0.25f, 0.0f, 1.0f  };
+    float r_tr[] = { tr_a, tr_b, tr_c };
+    float r_br[] = { br_a, br_b, br_c };
+    float r_bl[] = { bl_a, bl_b, bl_c };
+    float r_tl[] = { tl_a, tl_b, tl_c };
     Rectangle rectangle(r_tl, r_tr, r_bl, r_br);
-
 
     shader = {editor.GetText()};
     while (!glfwWindowShouldClose(Gui::window) && !exit) {
@@ -147,6 +147,9 @@ void Gui::BeginRenderer() noexcept {
 
         int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
+        WIDTH = display_w;
+        HEIGHT = display_h;
+
         double mouse_x, mouse_y;
         glfwGetCursorPos(window, &mouse_x, &mouse_y);
 
@@ -158,6 +161,12 @@ void Gui::BeginRenderer() noexcept {
         glViewport(0, 0, display_w, display_h);
         glClearColor(0.12f, 0.12f, 0.12f, 1);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        float _r_tr[] = { tr_a, tr_b, tr_c };
+        float _r_br[] = { br_a, br_b, br_c };
+        float _r_bl[] = { bl_a, bl_b, bl_c };
+        float _r_tl[] = { tl_a, tl_b, tl_c };
+        rectangle = {_r_tl, _r_tr, _r_bl, _r_br};
 
         shader.use();
         glUniform1f(glGetUniformLocation(shader.programID, "time"), glfwGetTime());
@@ -180,57 +189,100 @@ void Gui::BeginRenderer() noexcept {
 int Gui::Render() noexcept {
 //    ImGui::ShowDemoWindow();
 
+    static bool show_editor = true;
 
-    ImGui::Begin("Editor", nullptr, ImGuiWindowFlags_MenuBar);
-    if (ImGui::BeginMenuBar()) {
-        if (ImGui::BeginMenu("File")) {
-            if (ImGui::MenuItem("Save", "Ctrl-S")) {
-                auto textToSave = editor.GetText();
-                shader = {textToSave};
+    if (show_editor) {
+        ImGui::Begin("Editor", nullptr, ImGuiWindowFlags_MenuBar);
+        if (ImGui::BeginMenuBar()) {
+            if (ImGui::BeginMenu("File")) {
+                if (ImGui::MenuItem("Save", "Ctrl-S")) {
+                    auto textToSave = editor.GetText();
+                    shader = {textToSave};
+                }
+                if (ImGui::MenuItem("Quit", "Alt-F4"))
+                    return -1;
+                ImGui::EndMenu();
             }
-            if (ImGui::MenuItem("Quit", "Alt-F4"))
-                return -1;
-            ImGui::EndMenu();
+            if (ImGui::BeginMenu("Edit")) {
+                if (ImGui::MenuItem("Undo", "ALT-Backspace", nullptr, editor.CanUndo()))
+                    editor.Undo();
+                if (ImGui::MenuItem("Redo", "Ctrl-Y", nullptr, editor.CanRedo()))
+                    editor.Redo();
+
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Copy", "Ctrl-C", nullptr, editor.HasSelection()))
+                    editor.Copy();
+                if (ImGui::MenuItem("Cut", "Ctrl-X", nullptr, editor.HasSelection()))
+                    editor.Cut();
+                if (ImGui::MenuItem("Delete", "Del", nullptr, editor.HasSelection()))
+                    editor.Delete();
+                if (ImGui::MenuItem("Paste", "Ctrl-V", nullptr, ImGui::GetClipboardText() != nullptr))
+                    editor.Paste();
+
+                ImGui::Separator();
+
+                if (ImGui::MenuItem("Select all", nullptr, nullptr))
+                    editor.SetSelection(TextEditor::Coordinates(), TextEditor::Coordinates(editor.GetTotalLines(), 0));
+
+                ImGui::EndMenu();
+            }
+
+            if (ImGui::BeginMenu("View")) {
+                if (ImGui::MenuItem("Dark palette"))
+                    editor.SetPalette(TextEditor::GetDarkPalette());
+                if (ImGui::MenuItem("Light palette"))
+                    editor.SetPalette(TextEditor::GetLightPalette());
+                if (ImGui::MenuItem("Retro blue palette"))
+                    editor.SetPalette(TextEditor::GetRetroBluePalette());
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenuBar();
         }
-        if (ImGui::BeginMenu("Edit")) {
-            if (ImGui::MenuItem("Undo", "ALT-Backspace", nullptr, editor.CanUndo()))
-                editor.Undo();
-            if (ImGui::MenuItem("Redo", "Ctrl-Y", nullptr, editor.CanRedo()))
-                editor.Redo();
 
-            ImGui::Separator();
-
-            if (ImGui::MenuItem("Copy", "Ctrl-C", nullptr, editor.HasSelection()))
-                editor.Copy();
-            if (ImGui::MenuItem("Cut", "Ctrl-X", nullptr, editor.HasSelection()))
-                editor.Cut();
-            if (ImGui::MenuItem("Delete", "Del", nullptr, editor.HasSelection()))
-                editor.Delete();
-            if (ImGui::MenuItem("Paste", "Ctrl-V", nullptr, ImGui::GetClipboardText() != nullptr))
-                editor.Paste();
-
-            ImGui::Separator();
-
-            if (ImGui::MenuItem("Select all", nullptr, nullptr))
-                editor.SetSelection(TextEditor::Coordinates(), TextEditor::Coordinates(editor.GetTotalLines(), 0));
-
-            ImGui::EndMenu();
-        }
-
-        if (ImGui::BeginMenu("View")) {
-            if (ImGui::MenuItem("Dark palette"))
-                editor.SetPalette(TextEditor::GetDarkPalette());
-            if (ImGui::MenuItem("Light palette"))
-                editor.SetPalette(TextEditor::GetLightPalette());
-            if (ImGui::MenuItem("Retro blue palette"))
-                editor.SetPalette(TextEditor::GetRetroBluePalette());
-            ImGui::EndMenu();
-        }
-        ImGui::EndMenuBar();
+        editor.Render("Editor");
+        ImGui::End();
     }
 
-    editor.Render("TextEditor");
+    ImGui::Begin("Options");
+    if (ImGui::TreeNode("Position")) {
+        ImGui::SliderFloat("Top Right X", &tr_a, -1.0f, 1.0f);
+        ImGui::SliderFloat("Top Right Y", &tr_b, -1.0f, 1.0f);
+        ImGui::Separator();
+
+        ImGui::SliderFloat("Top Left X", &tl_a, -1.0f, 1.0f);
+        ImGui::SliderFloat("Top Left Y", &tl_b, -1.0f, 1.0f);
+        ImGui::Separator();
+
+        ImGui::SliderFloat("Bottom Right X", &br_a, -1.0f, 1.0f);
+        ImGui::SliderFloat("Bottom Right Y", &br_b, -1.0f, 1.0f);
+        ImGui::Separator();
+
+        ImGui::SliderFloat("Bottom Left X", &bl_a, -1.0f, 1.0f);
+        ImGui::SliderFloat("Bottom Left Y", &bl_b, -1.0f, 1.0f);
+
+        ImGui::TreePop();
+    }
+
+    static int style_idx = 0;
+    if (ImGui::Combo("Style", &style_idx, "Phocus Green\0Dark\0Light\0Classic\0Maya\0Monochrome\0The_0n3\0ModernDarkTheme\0EmbraceTheDarkness")) {
+        switch (style_idx) {
+            case 0: Theme::PhocosGreen(); break;
+            case 1: ImGui::StyleColorsDark(); break;
+            case 2: ImGui::StyleColorsLight(); break;
+            case 3: ImGui::StyleColorsClassic(); break;
+            case 4: Theme::Maya(); break;
+            case 5: Theme::Monochrome(); break;
+            case 6: Theme::The_0n3(); break;
+            case 7: Theme::ModernDarkTheme(); break;
+            case 8: Theme::EmbraceTheDarkness(); break;
+        }
+    }
+
+    ImGui::Checkbox("Editor", &show_editor);
+
     ImGui::End();
+
 
     return 0;
 }

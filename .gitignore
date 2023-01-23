@@ -7,7 +7,7 @@ lib/
 
 *_old/
 
-TextEditor.*
+#TextEditor.*
 
 # CMakeLists doesnt work, may fix it later
 CMakeLists.txt
