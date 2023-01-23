@@ -2,11 +2,12 @@ include/
 comp/
 cmake-build-debug/
 lib/
-**/*.exe
-**/*.dll
 
 *_old/
 
+*.dll
+*.exe
+*.o
 #TextEditor.*
 
 # CMakeLists doesnt work, may fix it later
