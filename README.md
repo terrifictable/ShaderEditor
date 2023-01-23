@@ -4,8 +4,14 @@ its using [ImGui](https://github.com/ocornut/imgui)
 
 <br>
 
-# Showcase
+## Showcase
 ![img.png](img.png)
+
+<br>
+
+## ToDo
+- Use Zep instead of ImGuiColoredTextEditor
+- Settings for shaders like custom uniforms and other things
 
 <br>
 
