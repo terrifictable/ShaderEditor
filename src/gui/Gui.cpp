@@ -185,7 +185,7 @@ void Gui::BeginRenderer() noexcept {
 
 
 int Gui::Render() noexcept {
-    ImGui::ShowDemoWindow();
+//    ImGui::ShowDemoWindow();
 
 
     ImGui::Begin("Editor", nullptr, ImGuiWindowFlags_MenuBar);
@@ -238,22 +238,6 @@ int Gui::Render() noexcept {
 
     editor.Render("TextEditor");
     ImGui::End();
-
-
-
-//    ImGui::Begin("Hello, world!", nullptr, /* ImGuiWindowFlags_NoResize */ 0);
-//    ImGui::Text("This is some useful text.");
-//
-//    ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-//    ImGui::ColorEdit3("clear color", (float*)&clear_color);
-//
-//    if (ImGui::Button("Button"))
-//        counter++;
-//    ImGui::SameLine();
-//    ImGui::Text("counter = %d", counter);
-//
-//    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-//    ImGui::End();
 
     return 0;
 }
