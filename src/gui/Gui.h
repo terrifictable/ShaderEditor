@@ -7,9 +7,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-//#include "../Shader/Shader.h"
+#include "../OpenGL/Shader/Shader.h"
+#include "../imgui/TextEditor.h"
+
 #include <iostream>
-#include "../shader/Shader.h"
 
 
 class Gui {
@@ -18,6 +19,10 @@ class Gui {
     GLFWwindow *window;
     const char* glsl_version;
     ImVec4 clear_color;
+
+    TextEditor editor;
+
+    Shader shader{};
 
     int WIDTH;
     int HEIGHT;
@@ -36,7 +41,7 @@ public:
     static void DestroyImGui() noexcept;
 
     void BeginRenderer() noexcept;
-    void Render() noexcept;
+    int Render() noexcept;
 };
 
 #endif //SHADER_EDITOR_GUI_H
