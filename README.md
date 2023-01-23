@@ -25,4 +25,7 @@ shader_editor/
   - default.vsh
 - src/
   - glad.c
+  - imgui/
+    - TextEditor.cpp (from https://github.com/BalazsJako/ColorTextEditorDemo)
+    - TextEditor.h (also from https://github.com/BalazsJako/ColorTextEditorDemo)
   - *other files should already be there*
