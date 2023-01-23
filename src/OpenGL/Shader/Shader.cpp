@@ -3,7 +3,6 @@
 //#define DEBUG
 
 
-
 std::string readFile(const char* filename);
 
 
@@ -11,6 +10,12 @@ Shader::Shader(std::string vertex_src, std::string fragment_src) {
     readShadersFromFile(vertex_src, fragment_src);
     init();
 }
+Shader::Shader(std::string fragment_shader) {
+    vertex_shader_src = readFile("shaders/default.vsh");
+    fragment_shader_src = fragment_shader;
+    init();
+}
+Shader::Shader() {}
 Shader::~Shader() {
 //    glDeleteProgram(programID);
 }

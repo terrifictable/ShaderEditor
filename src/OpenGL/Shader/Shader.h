@@ -1,7 +1,7 @@
 #ifndef SHADER_H
 #define SHADER_H
 
-#include <glad/glad.h>
+#include "glad/glad.h"
 #include <iostream>
 #include <cstdlib>
 #include <sstream>
@@ -26,6 +26,7 @@ public:
     GLuint programID;
 
     Shader(std::string vertex_path, std::string fragment_path);
+    Shader(std::string fragment_shader);
     ~Shader();
 
 
@@ -34,6 +35,8 @@ public:
     void setBool(   const std::string &name, bool     value   );
     void setInt(    const std::string &name, int      value   );
     void setFloat(  const std::string &name, float    value   );
+
+    Shader();
 };
 
 
