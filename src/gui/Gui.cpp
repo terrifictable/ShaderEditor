@@ -2,6 +2,7 @@
 
 #include "themes.h"
 #include "../utils.h"
+#include "../info.h"
 
 
 #define DEBUG
@@ -190,6 +191,7 @@ int Gui::Render() noexcept {
 //    ImGui::ShowDemoWindow();
 
     static bool show_editor = true;
+    static bool show_debug = false;
 
     if (show_editor) {
         ImGui::Begin("Editor", nullptr, ImGuiWindowFlags_MenuBar);
@@ -204,7 +206,7 @@ int Gui::Render() noexcept {
                 ImGui::EndMenu();
             }
             if (ImGui::BeginMenu("Edit")) {
-                if (ImGui::MenuItem("Undo", "ALT-Backspace", nullptr, editor.CanUndo()))
+                if (ImGui::MenuItem("Undo", "Ctrl-Z", nullptr, editor.CanUndo()))
                     editor.Undo();
                 if (ImGui::MenuItem("Redo", "Ctrl-Y", nullptr, editor.CanRedo()))
                     editor.Redo();
@@ -264,6 +266,52 @@ int Gui::Render() noexcept {
         ImGui::TreePop();
     }
 
+    if (show_debug) {
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
+        static int location = 0;
+
+        if (location >= 0) {
+            const float PAD = 10.0f;
+            const ImGuiViewport* viewport = ImGui::GetMainViewport();
+            ImVec2 work_pos = viewport->WorkPos;
+            ImVec2 work_size = viewport->WorkSize;
+            ImVec2 window_pos, window_pos_pivot;
+            window_pos.x = (location & 1) ? (work_pos.x + work_size.x - PAD) : (work_pos.x + PAD);
+            window_pos.y = (location & 2) ? (work_pos.y + work_size.y - PAD) : (work_pos.y + PAD);
+            window_pos_pivot.x = (location & 1) ? 1.0f : 0.0f;
+            window_pos_pivot.y = (location & 2) ? 1.0f : 0.0f;
+            ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
+            window_flags |= ImGuiWindowFlags_NoMove;
+        } else if (location == -2) {
+            ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+            window_flags |= ImGuiWindowFlags_NoMove;
+        }
+
+        ImGui::SetNextWindowBgAlpha(0.35f);
+        if (ImGui::Begin("Debug", &show_debug, window_flags)) {
+            ImGui::Text("Version: %s", Info::Version.c_str());
+            ImGui::Text("OpenGL: %s", glfwGetVersionString());
+
+            ImGui::Separator();
+            ImGui::Text("Window: %dx%d", WIDTH, HEIGHT);
+            ImGui::Text("Time: %f", glfwGetTime());
+            ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
+
+            if (ImGui::BeginPopupContextWindow()) {
+                if (ImGui::MenuItem("Custom",       nullptr, location == -1)) location = -1;
+                if (ImGui::MenuItem("Center",       nullptr, location == -2)) location = -2;
+                if (ImGui::MenuItem("Top-left",     nullptr, location == 0)) location = 0;
+                if (ImGui::MenuItem("Top-right",    nullptr, location == 1)) location = 1;
+                if (ImGui::MenuItem("Bottom-left",  nullptr, location == 2)) location = 2;
+                if (ImGui::MenuItem("Bottom-right", nullptr, location == 3)) location = 3;
+                if (show_debug && ImGui::MenuItem("Close")) show_debug = false;
+                ImGui::EndPopup();
+            }
+
+            ImGui::End();
+        }
+    }
+
     static int style_idx = 0;
     if (ImGui::Combo("Style", &style_idx, "Phocus Green\0Dark\0Light\0Classic\0Maya\0Monochrome\0The_0n3\0ModernDarkTheme\0EmbraceTheDarkness")) {
         switch (style_idx) {
@@ -279,6 +327,7 @@ int Gui::Render() noexcept {
         }
     }
 
+    ImGui::Checkbox("Debug", &show_debug);
     ImGui::Checkbox("Editor", &show_editor);
 
     ImGui::End();

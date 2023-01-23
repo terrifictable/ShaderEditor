@@ -1,5 +1,6 @@
 #include "utils.h"
 
+
 std::string readFile(const char* filename) {
     std::string shader_src_file_contents;
     std::fstream file;
