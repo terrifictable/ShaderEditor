@@ -121,8 +121,6 @@ void Gui::DestroyImGui() noexcept {
 
 
 
-std::string read_file(const char* filename);
-
 
 
 void Gui::BeginRenderer() noexcept {
@@ -130,12 +128,7 @@ void Gui::BeginRenderer() noexcept {
     editor.SetLanguageDefinition(lang);
     editor.SetPalette(TextEditor::GetDarkPalette());
 
-//    TextEditor::ErrorMarkers markers;
-//    markers.insert(std::make_pair<int, std::string>(6, "Example error here:\nInclude file not found: \"TextEditor.h\""));
-//    markers.insert(std::make_pair<int, std::string>(41, "Another example error"));
-//    editor.SetErrorMarkers(markers);
-
-    editor.SetText(read_file("shaders/default.fsh"));
+    editor.SetText(readFile("shaders/default.fsh"));
 
 
     float r_tr[] = {  1,  1, 0.0f,    1.0f,  0.0f, 0.25f };
@@ -242,33 +235,3 @@ int Gui::Render() noexcept {
     return 0;
 }
 
-
-
-
-
-std::string read_file(const char* filename) {
-    std::string shader_src_file_contents;
-    std::fstream file;
-
-    file.exceptions (std::ifstream::failbit | std::ifstream::badbit);
-
-    try {
-        file.open(filename);
-        std::stringstream file_stringstream;
-
-        file_stringstream << file.rdbuf();
-
-        file.close();
-
-        shader_src_file_contents = file_stringstream.str();
-
-    } catch(std::ifstream::failure e) {
-        std::cout << "File " << filename << " could not be read" << std::endl;
-    }
-
-//#ifdef DEBUG
-//    std::cout << "ShaderFile: " << shader_src_file_contents << std::endl;
-//#endif
-
-    return shader_src_file_contents;
-}

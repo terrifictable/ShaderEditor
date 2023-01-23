@@ -31,6 +31,7 @@ to compile the project, it will output a executable in the `out` folder<br>
 - Use Zep instead of ImGuiColoredTextEditor
 - Settings for shaders like custom uniforms and other things
 - Add options to change ImGui and Editor theme
+- find errors in shader while editing and show them as error markers
 
 <br>
 
