@@ -5,7 +5,7 @@ INCLUDE  := -Iinclude/
 LIB 	 := -Llib/
 LIBS 	 := -lglfw3dll -lopengl32
 
-SRC := comp/*.o src/*.cpp src/gui/*.cpp src/OpenGL/**/*.cpp src/imgui/widgets.cpp
+SRC := comp/*.o src/*.cpp src/gui/*.cpp src/OpenGL/**/*.cpp src/imgui/*.cpp
 
 
 test: compile run clean
@@ -17,7 +17,7 @@ compile:
 
 comp_libs:
 	@-mkdir comp
-	-$(COMPILER) -c --std=$(STD) $(INCLUDE) $(LIB) src/glad.c src/imgui/*.cpp $(LIBS)
+	-$(COMPILER) -c --std=$(STD) $(INCLUDE) $(LIB) src/glad.c src/imgui/**/*.cpp src/imgui/*.cpp $(LIBS)
 	-$(COMPILER) -c --std=$(STD) $(INCLUDE) $(LIB) include/imgui/*.cpp $(LIBS)
 	mv *.o comp/
 

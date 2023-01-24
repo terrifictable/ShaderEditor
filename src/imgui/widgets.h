@@ -4,6 +4,5 @@
 #include <functional>
 #include "imgui/imgui.h"
 
-void ToggleButton(const char* str_id, bool* v);
 
 #endif

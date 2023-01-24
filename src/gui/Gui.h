@@ -8,7 +8,7 @@
 #include <GLFW/glfw3.h>
 
 #include "../OpenGL/Shader/Shader.h"
-#include "../imgui/TextEditor.h"
+#include "../imgui/TextEditor/TextEditor.h"
 #include "../OpenGL/Shape/Shapes/Rectangle.h"
 
 #include <iostream>

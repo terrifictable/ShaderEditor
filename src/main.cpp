@@ -6,7 +6,7 @@ int main() {
 
     gui.SetupOpenGl();
 
-    gui.CreateOpenGlWindow("Shader Editor");
+    gui.CreateOpenGlWindow("Shader TextEditor");
     gui.CreateImGui();
 
     gui.BeginRenderer();

@@ -396,7 +396,7 @@ namespace Theme {
         colors[ImGuiCol_TabActive]              = ImVec4(0.20f, 0.20f, 0.20f, 0.36f);
         colors[ImGuiCol_TabUnfocused]           = ImVec4(0.00f, 0.00f, 0.00f, 0.52f);
         colors[ImGuiCol_TabUnfocusedActive]     = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
-        colors[ImGuiCol_PlotLines]              = ImVec4(0.38f, 0.84f, 0.49f, 1.00f);
+        colors[ImGuiCol_PlotLines]              = ImVec4(0.38f, 0.84, 0.49f, 1.00f);
         colors[ImGuiCol_PlotLinesHovered]       = ImVec4(0.08f, 0.60f, 0.11f, 1.00f);
         colors[ImGuiCol_PlotHistogram]          = ImVec4(0.38f, 0.84f, 0.49f, 1.00f);
         colors[ImGuiCol_PlotHistogramHovered]   = ImVec4(0.13f, 0.70f, 0.28f, 1.00f);

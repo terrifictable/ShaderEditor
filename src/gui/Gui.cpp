@@ -3,7 +3,7 @@
 #include "themes.h"
 #include "../utils.h"
 #include "../info.h"
-#include "../imgui/widgets.h"
+#include "../imgui/imgui_toggle.h"
 
 
 #define DEBUG
@@ -195,7 +195,7 @@ int Gui::Render() noexcept {
 //    }
 
     if (show_editor) {
-        ImGui::Begin("Editor", nullptr, ImGuiWindowFlags_MenuBar);
+        ImGui::Begin("TextEditor", nullptr, ImGuiWindowFlags_MenuBar);
         if (ImGui::BeginMenuBar()) {
             if (ImGui::BeginMenu("File")) {
                 if (ImGui::MenuItem("Save", "Ctrl-S")) {
@@ -243,7 +243,7 @@ int Gui::Render() noexcept {
             ImGui::EndMenuBar();
         }
 
-        editor.Render("Editor");
+        editor.Render("TextEditor");
         ImGui::End();
     }
 
@@ -328,8 +328,13 @@ int Gui::Render() noexcept {
             }
         }
 
-        ToggleButton("Debug", &show_debug);
-        ToggleButton("Editor", &show_editor);
+        static float duration = 0.25f;
+        static ImGuiToggleConfig config;
+        config.AnimationDuration = duration;
+        config.Flags |= ImGuiToggleFlags_Animated;
+
+        ImGui::Toggle("Debug", &show_debug, config);
+        ImGui::Toggle("Text Editor", &show_editor, config);
 
         ImGui::End();
     }
