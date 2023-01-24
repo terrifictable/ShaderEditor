@@ -6,6 +6,7 @@ its using [ImGui](https://github.com/ocornut/imgui)
 
 ## Showcase
 ![img.png](img.png)
+![image.png](image.png)
 
 <br>
 
