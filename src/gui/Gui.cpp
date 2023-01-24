@@ -3,6 +3,7 @@
 #include "themes.h"
 #include "../utils.h"
 #include "../info.h"
+#include "../imgui/widgets.h"
 
 
 #define DEBUG
@@ -83,14 +84,8 @@ void Gui::CreateImGui() {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
-//     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-//     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
     ImGui::StyleColorsDark();
-//    ImGuiStyle& style = ImGui::GetStyle();
-//    style.WindowRounding = 4;
-//    style.FrameRounding = 4;
-//    style.GrabRounding = 3;
     Theme::PhocosGreen();
 
 
@@ -157,8 +152,8 @@ void Gui::BeginRenderer() noexcept {
 
         if (Gui::Render() != 0)
             break;
-
         ImGui::Render();
+
         glViewport(0, 0, display_w, display_h);
         glClearColor(0.12f, 0.12f, 0.12f, 1);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -174,6 +169,7 @@ void Gui::BeginRenderer() noexcept {
         glUniform2f(glGetUniformLocation(shader.programID, "mouse"), mouse_x, mouse_y);
         glUniform2f(glGetUniformLocation(shader.programID, "resolution"), display_w, display_h);
         rectangle.Draw();
+
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -192,6 +188,11 @@ int Gui::Render() noexcept {
 
     static bool show_editor = true;
     static bool show_debug = false;
+
+//    if (ImGui::Begin("Shader")) {
+//
+//        ImGui::End();
+//    }
 
     if (show_editor) {
         ImGui::Begin("Editor", nullptr, ImGuiWindowFlags_MenuBar);
@@ -246,92 +247,92 @@ int Gui::Render() noexcept {
         ImGui::End();
     }
 
-    ImGui::Begin("Options");
-    if (ImGui::TreeNode("Position")) {
-        ImGui::SliderFloat("Top Right X", &tr_a, -1.0f, 1.0f);
-        ImGui::SliderFloat("Top Right Y", &tr_b, -1.0f, 1.0f);
-        ImGui::Separator();
+    if (ImGui::Begin("Options")) {
+        if (ImGui::TreeNode("Position")) {
+            ImGui::SliderFloat("Top Right X", &tr_a, -1.0f, 1.0f);
+            ImGui::SliderFloat("Top Right Y", &tr_b, -1.0f, 1.0f);
+            ImGui::Separator();
 
-        ImGui::SliderFloat("Top Left X", &tl_a, -1.0f, 1.0f);
-        ImGui::SliderFloat("Top Left Y", &tl_b, -1.0f, 1.0f);
-        ImGui::Separator();
+            ImGui::SliderFloat("Top Left X", &tl_a, -1.0f, 1.0f);
+            ImGui::SliderFloat("Top Left Y", &tl_b, -1.0f, 1.0f);
+            ImGui::Separator();
 
-        ImGui::SliderFloat("Bottom Right X", &br_a, -1.0f, 1.0f);
-        ImGui::SliderFloat("Bottom Right Y", &br_b, -1.0f, 1.0f);
-        ImGui::Separator();
+            ImGui::SliderFloat("Bottom Right X", &br_a, -1.0f, 1.0f);
+            ImGui::SliderFloat("Bottom Right Y", &br_b, -1.0f, 1.0f);
+            ImGui::Separator();
 
-        ImGui::SliderFloat("Bottom Left X", &bl_a, -1.0f, 1.0f);
-        ImGui::SliderFloat("Bottom Left Y", &bl_b, -1.0f, 1.0f);
+            ImGui::SliderFloat("Bottom Left X", &bl_a, -1.0f, 1.0f);
+            ImGui::SliderFloat("Bottom Left Y", &bl_b, -1.0f, 1.0f);
 
-        ImGui::TreePop();
-    }
-
-    if (show_debug) {
-        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
-        static int location = 0;
-
-        if (location >= 0) {
-            const float PAD = 10.0f;
-            const ImGuiViewport* viewport = ImGui::GetMainViewport();
-            ImVec2 work_pos = viewport->WorkPos;
-            ImVec2 work_size = viewport->WorkSize;
-            ImVec2 window_pos, window_pos_pivot;
-            window_pos.x = (location & 1) ? (work_pos.x + work_size.x - PAD) : (work_pos.x + PAD);
-            window_pos.y = (location & 2) ? (work_pos.y + work_size.y - PAD) : (work_pos.y + PAD);
-            window_pos_pivot.x = (location & 1) ? 1.0f : 0.0f;
-            window_pos_pivot.y = (location & 2) ? 1.0f : 0.0f;
-            ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
-            window_flags |= ImGuiWindowFlags_NoMove;
-        } else if (location == -2) {
-            ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
-            window_flags |= ImGuiWindowFlags_NoMove;
+            ImGui::TreePop();
         }
 
-        ImGui::SetNextWindowBgAlpha(0.35f);
-        if (ImGui::Begin("Debug", &show_debug, window_flags)) {
-            ImGui::Text("Version: %s", Info::Version.c_str());
-            ImGui::Text("OpenGL: %s", glfwGetVersionString());
+        if (show_debug) {
+            ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
+            static int location = 0;
 
-            ImGui::Separator();
-            ImGui::Text("Window: %dx%d", WIDTH, HEIGHT);
-            ImGui::Text("Time: %f", glfwGetTime());
-            ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
-
-            if (ImGui::BeginPopupContextWindow()) {
-                if (ImGui::MenuItem("Custom",       nullptr, location == -1)) location = -1;
-                if (ImGui::MenuItem("Center",       nullptr, location == -2)) location = -2;
-                if (ImGui::MenuItem("Top-left",     nullptr, location == 0)) location = 0;
-                if (ImGui::MenuItem("Top-right",    nullptr, location == 1)) location = 1;
-                if (ImGui::MenuItem("Bottom-left",  nullptr, location == 2)) location = 2;
-                if (ImGui::MenuItem("Bottom-right", nullptr, location == 3)) location = 3;
-                if (show_debug && ImGui::MenuItem("Close")) show_debug = false;
-                ImGui::EndPopup();
+            if (location >= 0) {
+                const float PAD = 10.0f;
+                const ImGuiViewport* viewport = ImGui::GetMainViewport();
+                ImVec2 work_pos = viewport->WorkPos;
+                ImVec2 work_size = viewport->WorkSize;
+                ImVec2 window_pos, window_pos_pivot;
+                window_pos.x = (location & 1) ? (work_pos.x + work_size.x - PAD) : (work_pos.x + PAD);
+                window_pos.y = (location & 2) ? (work_pos.y + work_size.y - PAD) : (work_pos.y + PAD);
+                window_pos_pivot.x = (location & 1) ? 1.0f : 0.0f;
+                window_pos_pivot.y = (location & 2) ? 1.0f : 0.0f;
+                ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
+                window_flags |= ImGuiWindowFlags_NoMove;
+            } else if (location == -2) {
+                ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+                window_flags |= ImGuiWindowFlags_NoMove;
             }
 
-            ImGui::End();
+            ImGui::SetNextWindowBgAlpha(0.35f);
+            if (ImGui::Begin("Debug", &show_debug, window_flags)) {
+                ImGui::Text("Version: %s", Info::Version.c_str());
+                ImGui::Text("OpenGL: %s", glfwGetVersionString());
+
+                ImGui::Separator();
+                ImGui::Text("Window: %dx%d", WIDTH, HEIGHT);
+                ImGui::Text("Time: %f", glfwGetTime());
+                ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
+
+                if (ImGui::BeginPopupContextWindow()) {
+                    if (ImGui::MenuItem("Custom",       nullptr, location == -1)) location = -1;
+                    if (ImGui::MenuItem("Center",       nullptr, location == -2)) location = -2;
+                    if (ImGui::MenuItem("Top-left",     nullptr, location == 0)) location = 0;
+                    if (ImGui::MenuItem("Top-right",    nullptr, location == 1)) location = 1;
+                    if (ImGui::MenuItem("Bottom-left",  nullptr, location == 2)) location = 2;
+                    if (ImGui::MenuItem("Bottom-right", nullptr, location == 3)) location = 3;
+                    if (show_debug && ImGui::MenuItem("Close")) show_debug = false;
+                    ImGui::EndPopup();
+                }
+
+                ImGui::End();
+            }
         }
-    }
 
-    static int style_idx = 0;
-    if (ImGui::Combo("Style", &style_idx, "Phocus Green\0Dark\0Light\0Classic\0Maya\0Monochrome\0The_0n3\0ModernDarkTheme\0EmbraceTheDarkness")) {
-        switch (style_idx) {
-            case 0: Theme::PhocosGreen(); break;
-            case 1: ImGui::StyleColorsDark(); break;
-            case 2: ImGui::StyleColorsLight(); break;
-            case 3: ImGui::StyleColorsClassic(); break;
-            case 4: Theme::Maya(); break;
-            case 5: Theme::Monochrome(); break;
-            case 6: Theme::The_0n3(); break;
-            case 7: Theme::ModernDarkTheme(); break;
-            case 8: Theme::EmbraceTheDarkness(); break;
+        static int style_idx = 0;
+        if (ImGui::Combo("Style", &style_idx, "Phocus Green\0Dark\0Light\0Classic\0Maya\0Monochrome\0The_0n3\0ModernDarkTheme\0EmbraceTheDarkness")) {
+            switch (style_idx) {
+                case 0: Theme::PhocosGreen(); break;
+                case 1: ImGui::StyleColorsDark(); break;
+                case 2: ImGui::StyleColorsLight(); break;
+                case 3: ImGui::StyleColorsClassic(); break;
+                case 4: Theme::Maya(); break;
+                case 5: Theme::Monochrome(); break;
+                case 6: Theme::The_0n3(); break;
+                case 7: Theme::ModernDarkTheme(); break;
+                case 8: Theme::EmbraceTheDarkness(); break;
+            }
         }
+
+        ToggleButton("Debug", &show_debug);
+        ToggleButton("Editor", &show_editor);
+
+        ImGui::End();
     }
-
-    ImGui::Checkbox("Debug", &show_debug);
-    ImGui::Checkbox("Editor", &show_editor);
-
-    ImGui::End();
-
 
     return 0;
 }

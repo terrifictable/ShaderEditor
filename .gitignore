@@ -5,6 +5,8 @@ lib/
 
 *_old/
 
+stb_image.h
+
 *.dll
 *.exe
 *.o
