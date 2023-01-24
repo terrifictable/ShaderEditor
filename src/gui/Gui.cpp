@@ -314,7 +314,7 @@ int Gui::Render() noexcept {
         }
 
         static int style_idx = 0;
-        if (ImGui::Combo("Style", &style_idx, "Phocus Green\0Dark\0Light\0Classic\0Maya\0Monochrome\0The_0n3\0ModernDarkTheme\0EmbraceTheDarkness")) {
+        if (ImGui::Combo("Style", &style_idx, "Phocus Green\0Dark\0Light\0Classic\0Maya\0Monochrome\0The_0n3\0ModernDarkTheme\0EmbraceTheDarkness\0")) {
             switch (style_idx) {
                 case 0: Theme::PhocosGreen(); break;
                 case 1: ImGui::StyleColorsDark(); break;
@@ -328,13 +328,20 @@ int Gui::Render() noexcept {
             }
         }
 
-        static float duration = 0.25f;
+        const ImVec4 green(0.35f, 0.78f, 0.49f, 1.0f);
+        const ImVec4 green_hover(0.34f, 0.84f, 0.49f, 1.0f);
+        const ImVec4 salmon(1.0f, 0.43f, 0.35f, 1.0f);
+        ImGui::PushStyleColor(ImGuiCol_Button, green);
+        ImGui::PushStyleColor(ImGuiCol_ButtonHovered, green_hover);
+        ImGui::PushStyleColor(ImGuiCol_ButtonActive, salmon);
+
         static ImGuiToggleConfig config;
-        config.AnimationDuration = duration;
+        config.AnimationDuration = 0.25f;
         config.Flags |= ImGuiToggleFlags_Animated;
 
-        ImGui::Toggle("Debug", &show_debug, config);
+        ImGui::Toggle("Debug Info", &show_debug, config);
         ImGui::Toggle("Text Editor", &show_editor, config);
+        ImGui::PopStyleColor(3);
 
         ImGui::End();
     }
