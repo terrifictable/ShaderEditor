@@ -11,5 +11,6 @@
 
 std::string readFile(const char* filename);
 
+bool fileExists(const char* filename);
 
 #endif

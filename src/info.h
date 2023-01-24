@@ -4,7 +4,7 @@
 #include <string>
 
 namespace Info {
-    std::string Version = "b0.1.01";
+    std::string Version = "b0.1.02";
 };
 
 #endif //SHADER_EDITOR_INFO_H

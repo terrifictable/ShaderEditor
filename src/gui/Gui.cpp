@@ -93,8 +93,12 @@ void Gui::CreateImGui() {
     ImGui_ImplOpenGL3_Init(glsl_version);
 
     io.Fonts->AddFontDefault();
-    ImFont* font = io.Fonts->AddFontFromFileTTF("out/roboto.ttf", 15.0f);
-    IM_ASSERT(font != nullptr);
+    ImFont* font;
+    if (fileExists("out/roboto.ttf"))
+        font = io.Fonts->AddFontFromFileTTF("out/roboto.ttf", 15.0f);
+    else
+        font = io.Fonts->AddFontFromFileTTF("roboto.ttf", 15.0f);
+    assert(font != nullptr && "Failed to load roboto font");
     io.FontDefault = font;
 
 #ifdef DEBUG
@@ -121,7 +125,11 @@ void Gui::BeginRenderer() noexcept {
     editor.SetLanguageDefinition(lang);
     editor.SetPalette(TextEditor::GetDarkPalette());
 
-    editor.SetText(readFile("shaders/default.fsh"));
+    if (fileExists("shaders/default.fsh"))
+        editor.SetText(readFile("shaders/default.fsh"));
+    else
+        editor.SetText("#version 330\n\n\nvoid main() {\n\tgl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n}");
+
 
     tr_a =  1.0f; tr_b =  1.0f; tr_c = 0.0f;
     br_a =  1.0f; br_b = -1.0f; br_c = 0.0f;
