@@ -1,6 +1,6 @@
 # Shader Editor and Viewer using ImGui
 This is supposed to become a opengl (glsl) shader editor and viewer<br>
-its using [ImGui](https://github.com/ocornut/imgui)
+its using [ImGui's docking branch](https://github.com/ocornut/imgui/tree/docking)
 
 <br>
 

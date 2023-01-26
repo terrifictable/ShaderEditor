@@ -84,10 +84,10 @@ void Gui::CreateImGui() {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
 
     ImGui::StyleColorsDark();
     Theme::PhocosGreen();
-
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
@@ -100,6 +100,8 @@ void Gui::CreateImGui() {
         font = io.Fonts->AddFontFromFileTTF("roboto.ttf", 15.0f);
     assert(font != nullptr && "Failed to load roboto font");
     io.FontDefault = font;
+
+    show_shader_window = false;
 
 #ifdef DEBUG
     std::cout << "Created ImGui window" << std::endl;
@@ -128,7 +130,7 @@ void Gui::BeginRenderer() noexcept {
     if (fileExists("shaders/default.fsh"))
         editor.SetText(readFile("shaders/default.fsh"));
     else
-        editor.SetText("#version 330\n\n\nvoid main() {\n\tgl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n}");
+        editor.SetText("#version 330\n\nuniform float time;\nuniform vec2 resolution;\nuniform vec2 mouse;\n\nvoid main() {\n\tgl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);\n}");
 
 
     tr_a =  1.0f; tr_b =  1.0f; tr_c = 0.0f;
@@ -157,7 +159,6 @@ void Gui::BeginRenderer() noexcept {
         double mouse_x, mouse_y;
         glfwGetCursorPos(window, &mouse_x, &mouse_y);
 
-
         if (Gui::Render() != 0)
             break;
         ImGui::Render();
@@ -178,7 +179,6 @@ void Gui::BeginRenderer() noexcept {
         glUniform2f(glGetUniformLocation(shader.programID, "resolution"), display_w, display_h);
         rectangle.Draw();
 
-
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwPollEvents();
@@ -197,13 +197,24 @@ int Gui::Render() noexcept {
     static bool show_editor = true;
     static bool show_debug = false;
 
-//    if (ImGui::Begin("Shader")) {
-//
-//        ImGui::End();
-//    }
+    static int shader_width = 1280;
+    static int shader_height = 720;
+//    static bool move_outside_window = false;
+
+    if (show_shader_window) {
+        ImGui::SetNextWindowSize(ImVec2(shader_width, shader_height));
+        ImGui::Begin("Shader", &show_shader_window); {
+            // TODO: Fix rendering shader to fbo and displaying fbo as imgui_old image
+            //       also create header and cpp file for FBO
+
+//            ImGui::Image(reinterpret_cast<ImTextureID>(shader.texture2d), ImVec2(shader_width, shader_height));
+
+            ImGui::End();
+        }
+    }
 
     if (show_editor) {
-        ImGui::Begin("TextEditor", nullptr, ImGuiWindowFlags_MenuBar);
+        ImGui::Begin("TextEditor", &show_editor, ImGuiWindowFlags_MenuBar);
         if (ImGui::BeginMenuBar()) {
             if (ImGui::BeginMenu("File")) {
                 if (ImGui::MenuItem("Save", "Ctrl-S")) {
@@ -255,7 +266,52 @@ int Gui::Render() noexcept {
         ImGui::End();
     }
 
-    if (ImGui::Begin("Options")) {
+    if (show_debug) {
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
+        static int location = 0;
+
+        if (location >= 0) {
+            const float PAD = 10.0f;
+            const ImGuiViewport* viewport = ImGui::GetMainViewport();
+            ImVec2 work_pos = viewport->WorkPos;
+            ImVec2 work_size = viewport->WorkSize;
+            ImVec2 window_pos, window_pos_pivot;
+            window_pos.x = (location & 1) ? (work_pos.x + work_size.x - PAD) : (work_pos.x + PAD);
+            window_pos.y = (location & 2) ? (work_pos.y + work_size.y - PAD) : (work_pos.y + PAD);
+            window_pos_pivot.x = (location & 1) ? 1.0f : 0.0f;
+            window_pos_pivot.y = (location & 2) ? 1.0f : 0.0f;
+            ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
+            window_flags |= ImGuiWindowFlags_NoMove;
+        } else if (location == -2) {
+            ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
+            window_flags |= ImGuiWindowFlags_NoMove;
+        }
+
+        ImGui::SetNextWindowBgAlpha(0.35f);
+        ImGui::Begin("Debug", &show_debug, window_flags);
+        ImGui::Text("Version: %s", Info::Version.c_str());
+        ImGui::Text("OpenGL: %s", glfwGetVersionString());
+
+        ImGui::Separator();
+        ImGui::Text("Window: %dx%d", WIDTH, HEIGHT);
+        ImGui::Text("Time: %f", glfwGetTime());
+        ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
+
+        if (ImGui::BeginPopupContextWindow()) {
+            if (ImGui::MenuItem("Custom",       nullptr, location == -1)) location = -1;
+            if (ImGui::MenuItem("Center",       nullptr, location == -2)) location = -2;
+            if (ImGui::MenuItem("Top-left",     nullptr, location == 0)) location = 0;
+            if (ImGui::MenuItem("Top-right",    nullptr, location == 1)) location = 1;
+            if (ImGui::MenuItem("Bottom-left",  nullptr, location == 2)) location = 2;
+            if (ImGui::MenuItem("Bottom-right", nullptr, location == 3)) location = 3;
+            if (show_debug && ImGui::MenuItem("Close")) show_debug = false;
+            ImGui::EndPopup();
+        }
+
+        ImGui::End();
+    }
+
+    ImGui::Begin("Options"); {
         if (ImGui::TreeNode("Position")) {
             ImGui::SliderFloat("Top Right X", &tr_a, -1.0f, 1.0f);
             ImGui::SliderFloat("Top Right Y", &tr_b, -1.0f, 1.0f);
@@ -274,51 +330,16 @@ int Gui::Render() noexcept {
 
             ImGui::TreePop();
         }
+        ImGui::Separator();
 
-        if (show_debug) {
-            ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
-            static int location = 0;
+        if (show_shader_window) {
+            if (ImGui::TreeNode("Shader Window Scale")) {
+                ImGui::SliderInt("Width", &shader_width, 1, WIDTH);
+                ImGui::SliderInt("Height", &shader_height, 1, HEIGHT);
 
-            if (location >= 0) {
-                const float PAD = 10.0f;
-                const ImGuiViewport* viewport = ImGui::GetMainViewport();
-                ImVec2 work_pos = viewport->WorkPos;
-                ImVec2 work_size = viewport->WorkSize;
-                ImVec2 window_pos, window_pos_pivot;
-                window_pos.x = (location & 1) ? (work_pos.x + work_size.x - PAD) : (work_pos.x + PAD);
-                window_pos.y = (location & 2) ? (work_pos.y + work_size.y - PAD) : (work_pos.y + PAD);
-                window_pos_pivot.x = (location & 1) ? 1.0f : 0.0f;
-                window_pos_pivot.y = (location & 2) ? 1.0f : 0.0f;
-                ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
-                window_flags |= ImGuiWindowFlags_NoMove;
-            } else if (location == -2) {
-                ImGui::SetNextWindowPos(ImGui::GetMainViewport()->GetCenter(), ImGuiCond_Always, ImVec2(0.5f, 0.5f));
-                window_flags |= ImGuiWindowFlags_NoMove;
+                ImGui::TreePop();
             }
-
-            ImGui::SetNextWindowBgAlpha(0.35f);
-            if (ImGui::Begin("Debug", &show_debug, window_flags)) {
-                ImGui::Text("Version: %s", Info::Version.c_str());
-                ImGui::Text("OpenGL: %s", glfwGetVersionString());
-
-                ImGui::Separator();
-                ImGui::Text("Window: %dx%d", WIDTH, HEIGHT);
-                ImGui::Text("Time: %f", glfwGetTime());
-                ImGui::Text("FPS: %.1f", ImGui::GetIO().Framerate);
-
-                if (ImGui::BeginPopupContextWindow()) {
-                    if (ImGui::MenuItem("Custom",       nullptr, location == -1)) location = -1;
-                    if (ImGui::MenuItem("Center",       nullptr, location == -2)) location = -2;
-                    if (ImGui::MenuItem("Top-left",     nullptr, location == 0)) location = 0;
-                    if (ImGui::MenuItem("Top-right",    nullptr, location == 1)) location = 1;
-                    if (ImGui::MenuItem("Bottom-left",  nullptr, location == 2)) location = 2;
-                    if (ImGui::MenuItem("Bottom-right", nullptr, location == 3)) location = 3;
-                    if (show_debug && ImGui::MenuItem("Close")) show_debug = false;
-                    ImGui::EndPopup();
-                }
-
-                ImGui::End();
-            }
+            ImGui::Separator();
         }
 
         static int style_idx = 0;
@@ -335,6 +356,7 @@ int Gui::Render() noexcept {
                 case 8: Theme::EmbraceTheDarkness(); break;
             }
         }
+        ImGui::Separator();
 
         const ImVec4 green(0.35f, 0.78f, 0.49f, 1.0f);
         const ImVec4 green_hover(0.34f, 0.84f, 0.49f, 1.0f);
@@ -349,10 +371,18 @@ int Gui::Render() noexcept {
 
         ImGui::Toggle("Debug Info", &show_debug, config);
         ImGui::Toggle("Text Editor", &show_editor, config);
+        ImGui::Toggle("Shader in imgui window", &show_shader_window, config);
+//        ImGui::Separator();
+//        ImGui::Toggle("Move imgui windows out of window", &move_outside_window);
         ImGui::PopStyleColor(3);
 
         ImGui::End();
     }
+
+//    if (move_outside_window) {
+//        ImGuiIO& io = ImGui::GetIO();
+//        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+//    }
 
     return 0;
 }
