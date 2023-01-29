@@ -149,7 +149,7 @@ void ImGuiToggleRenderer::DrawToggle()
     const float height = GetHeight();
     const float width = GetWidth();
 
-    // update imgui state
+    // update imgui_old state
     _isHovered = g->HoveredId == _id;
     _isLastActive = g->LastActiveId == _id;
     _lastActiveTimer = g->LastActiveIdTimer;

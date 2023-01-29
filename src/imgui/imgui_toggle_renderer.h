@@ -29,7 +29,7 @@ private:
     float _lastActiveTimer;
     float _animationPercent;
 
-    // imgui specific context
+    // imgui_old specific context
     const ImGuiContext* g;
     const ImGuiStyle* _style;
     ImDrawList* _drawList;
