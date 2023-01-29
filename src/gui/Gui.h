@@ -19,8 +19,7 @@ class Gui {
 
     GLFWwindow *window;
     const char* glsl_version;
-    ImVec4 clear_color;
-
+    bool show_shader_window;
 
     float tr_a, tr_b, tr_c;
     float br_a, br_b, br_c;

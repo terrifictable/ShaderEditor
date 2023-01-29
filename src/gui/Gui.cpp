@@ -4,6 +4,7 @@
 #include "../utils.h"
 #include "../info.h"
 #include "../imgui/imgui_toggle.h"
+#include "font_roboto.h"
 
 
 #define DEBUG
@@ -93,11 +94,7 @@ void Gui::CreateImGui() {
     ImGui_ImplOpenGL3_Init(glsl_version);
 
     io.Fonts->AddFontDefault();
-    ImFont* font;
-    if (fileExists("out/roboto.ttf"))
-        font = io.Fonts->AddFontFromFileTTF("out/roboto.ttf", 15.0f);
-    else
-        font = io.Fonts->AddFontFromFileTTF("roboto.ttf", 15.0f);
+    ImFont* font = io.Fonts->AddFontFromMemoryCompressedTTF(roboto_compressed_data, roboto_compressed_size, 16);
     assert(font != nullptr && "Failed to load roboto font");
     io.FontDefault = font;
 
