@@ -5,6 +5,7 @@
 #include "../info.h"
 #include "../imgui/imgui_toggle.h"
 #include "font_roboto.h"
+#include "Animator.h"
 
 
 #define DEBUG
@@ -369,17 +370,10 @@ int Gui::Render() noexcept {
         ImGui::Toggle("Debug Info", &show_debug, config);
         ImGui::Toggle("Text Editor", &show_editor, config);
         ImGui::Toggle("Shader in imgui window", &show_shader_window, config);
-//        ImGui::Separator();
-//        ImGui::Toggle("Move imgui windows out of window", &move_outside_window);
         ImGui::PopStyleColor(3);
 
         ImGui::End();
     }
-
-//    if (move_outside_window) {
-//        ImGuiIO& io = ImGui::GetIO();
-//        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-//    }
 
     return 0;
 }
