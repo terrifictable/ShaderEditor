@@ -1,5 +1,17 @@
-//
-// Created by Sandbox on 24.01.2023.
-//
-
 #include "FBO.h"
+
+FBO::FBO() {
+    glGenFramebuffers(GL_FRAMEBUFFER, &fboId);
+}
+
+FBO::~FBO() {
+//    glDeleteFramebuffers(1, &fboId);
+}
+
+void FBO::bind() {
+
+}
+
+void FBO::unbind() {
+
+}

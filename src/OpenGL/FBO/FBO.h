@@ -1,8 +1,17 @@
-//
-// Created by Sandbox on 24.01.2023.
-//
+#ifndef FBO_H
+#define FBO_H
 
-#ifndef SHADER_EDITOR_FBO_H
-#define SHADER_EDITOR_FBO_H
+#include "glad/glad.h"
+
+class FBO {
+    GLuint fboId;
+
+public:
+    FBO();
+    ~FBO();
+
+    void bind();
+    void unbind();
+};
 
 #endif //SHADER_EDITOR_FBO_H
