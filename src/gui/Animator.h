@@ -1,17 +1,21 @@
 #ifndef ANIMATOR_H
 #define ANIMATOR_H
 
-template<typename T>
+//template<typename T>
 class Animator {
 private:
-    T Max;
-    T Speed;
+    float Max;
+    float Min;
+    float Speed;
 
 public:
-    Animator(T max, T speed);
-    ~Animator();
+    Animator(float max, float min, float speed);
+    ~Animator() = default;
 
-    void Pulse(T &value, bool &tick);
+
+    void Pulse(float *value, bool *tick);
+//    void FadeIn(T *value);
+//    void FadeOut(T *value);
 };
 
 
