@@ -27,16 +27,14 @@ public:
 
     Shader(std::string vertex_path, std::string fragment_path);
     Shader(std::string fragment_shader);
+    Shader();
     ~Shader();
-
 
     void use();
 
     void setBool(   const std::string &name, bool     value   );
     void setInt(    const std::string &name, int      value   );
     void setFloat(  const std::string &name, float    value   );
-
-    Shader();
 };
 
 

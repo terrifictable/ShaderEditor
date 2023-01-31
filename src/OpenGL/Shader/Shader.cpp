@@ -9,7 +9,12 @@ Shader::Shader(std::string vertex_src, std::string fragment_src) {
     init();
 }
 Shader::Shader(std::string fragment_shader) {
-    vertex_shader_src = readFile("shaders/default.vsh");
+    vertex_shader_src = "#version 330 core\n"
+                        "layout (location = 0) in vec3 aPos;\n"
+                        "uniform float u_time;\n"
+                        "void main() {\n"
+                        "\tgl_Position = vec4(aPos, 1.0);\n"
+                        "}";
     fragment_shader_src = fragment_shader;
     init();
 }
