@@ -5,7 +5,7 @@ INCLUDE  := -Iinclude/
 LIB 	 := -Llib/
 LIBS 	 := -lglfw3dll -lopengl32
 
-SRC := comp/*.o src/*.cpp src/gui/*.cpp src/OpenGL/**/*.cpp
+SRC := comp/*.o src/*.cpp $(wildcard src/gui/*.cpp) src/OpenGL/**/*.cpp
 # src/imgui/*.cpp
 
 
