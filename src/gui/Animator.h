@@ -14,8 +14,8 @@ public:
 
 
     void Pulse(float *value, bool *tick);
-//    void FadeIn(T *value);
-//    void FadeOut(T *value);
+    void FadeIn(float *value);
+    void FadeOut(float *value);
 };
 
 

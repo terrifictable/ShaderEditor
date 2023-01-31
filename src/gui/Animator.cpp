@@ -25,12 +25,12 @@ void Animator::Pulse(float *value, bool *tick) {
 }
 
 //template<typename T>
-//void Animator<T>::FadeIn(T &value) {
-//    if (value < Max)
-//        value += Speed;
-//}
+void Animator::FadeIn(float &value) {
+    if (value < Max)
+        value += Speed;
+}
 //template<typename T>
-//void Animator<T>::FadeOut(T &value) {
-//    if (value > Min)
-//        value -= Speed;
-//}
+void Animator::FadeOut(float &value) {
+    if (value > Min)
+        value -= Speed;
+}
