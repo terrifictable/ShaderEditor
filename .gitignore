@@ -2,7 +2,7 @@ include/
 comp/
 cmake-build-debug/
 lib/
-imgui_*/
+imgui/
 
 *_old/
 

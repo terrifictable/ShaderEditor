@@ -1,6 +1,6 @@
 #pragma once
 
-#include "imgui/imgui.h"
+#include "imgui.h"
 
 // Helper: ImOffsetRect A set of offsets to apply to an ImRect.
 struct IMGUI_API ImOffsetRect

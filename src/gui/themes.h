@@ -1,7 +1,7 @@
 #ifndef SHADER_EDITOR_THEMES_H
 #define SHADER_EDITOR_THEMES_H
 
-#include <imgui/imgui.h>
+#include <imgui.h>
 
 namespace Theme {
     void Maya() {
