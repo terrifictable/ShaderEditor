@@ -3,6 +3,7 @@ comp/
 cmake-build-debug/
 lib/
 imgui/
+zep/
 
 *_old/
 

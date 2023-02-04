@@ -33,10 +33,10 @@ its using [ImGui's docking branch](https://github.com/ocornut/imgui/tree/docking
 <br>
 
 ## ToDo
-- Use Zep instead of ImGuiColoredTextEditor
-- Settings for shaders like custom uniforms and other things
-- Add options to change ImGui and Editor theme
-- find errors in shader while editing and show them as error markers
+- [ ] Use Zep instead of ImGuiColoredTextEditor
+- [ ] Settings for shaders like custom uniforms and other things
+- [x] Add options to change ImGui and Editor theme
+- [ ] find errors in shader while editing and show them as error markers
 
 <br>
 
@@ -47,21 +47,13 @@ shader_editor/
 - include/
     - glad
     - GLFW
-    - imgui
     - KHR
 - lib/
   - glfw3.dll
-  - glfw3_mt.lib
   - glfw3dll.lib
 - out/
   - glfw3.dll
-  - roboto.ttf
-- shaders/
-  - default.fsh
-  - default.vsh
 - src/
   - glad.c
-  - imgui/
-    - TextEditor.cpp (from https://github.com/BalazsJako/ColorTextEditorDemo)
-    - TextEditor.h (also from https://github.com/BalazsJako/ColorTextEditorDemo)
-  - *other files should already be there*
+
+*other files and folders should already be there*

@@ -1,6 +1,7 @@
 #ifndef GUI_H
 #define GUI_H
 
+
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
@@ -10,6 +11,9 @@
 #include "../OpenGL/Shader/Shader.h"
 #include "../imgui/TextEditor/TextEditor.h"
 #include "../OpenGL/Shape/Shapes/Rectangle.h"
+
+//#define ZEP_SINGLE_HEADER_BUILD
+//#include <zep.h>
 
 #include <iostream>
 

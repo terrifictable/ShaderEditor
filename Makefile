@@ -1,7 +1,7 @@
 COMPILER := g++
 STD 	 := c++20
 FLAGS 	 := -ggdb -Wall -Weffc++ -Wextra -Werror
-INCLUDE  := -Iinclude/ -Iimgui/ -Iimgui/backends
+INCLUDE  := -Iinclude/ -Iimgui/ -Iimgui/backends -Izep/include
 LIB 	 := -Llib/
 LIBS 	 := -lglfw3dll -lopengl32
 
