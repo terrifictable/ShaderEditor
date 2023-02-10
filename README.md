@@ -1,11 +1,21 @@
-# Shader Editor and Viewer using ImGui
-This is supposed to become a opengl (glsl) shader editor and viewer<br>
+<div align="center">
+<img src="logo.png" width="300">
+
+<h1>Shader Editor and Viewer using ImGui
+<h3>This is supposed to become a opengl (glsl) shader editor and viewer<br>
 its using [ImGui's docking branch](https://github.com/ocornut/imgui/tree/docking)
 
 <br>
-
-### [Wiki](https://github.com/TerrificTable/ShaderEditor/wiki)
-
+<div class="links" align="center"><h3>
+  <a href="https://github.com/TerrificTable/ShaderEditor/wiki">Wiki</a>
+  ·
+  <a href="https://github.com/TerrificTable/ShaderEditor/issues">Report Bugs</a>
+  ·
+  <a href="https://github.com/TerrificTable/ShaderEditor/issues">Request Features</a>
+</div>
+</div>
+  
+  
 <br>
 
 ## Showcase
