@@ -3,10 +3,9 @@
 
 <h1>Shader Editor and Viewer using ImGui
 <h3>This is supposed to become a opengl (glsl) shader editor and viewer<br>
-its using <a href="https://github.com/ocornut/imgui/tree/docking">ImGui's docking branch</a>
+its using <a href="https://github.com/ocornut/imgui/tree/docking">ImGui's docking branch</a></h3>
 
-<br>
-<div class="links" align="center"><h5>
+<div class="links" align="center"><h3>
   <a href="https://github.com/TerrificTable/ShaderEditor/wiki">Wiki</a>
   ·
   <a href="https://github.com/TerrificTable/ShaderEditor/issues">Report Bugs</a>
