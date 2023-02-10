@@ -19,8 +19,8 @@ its using <a href="https://github.com/ocornut/imgui/tree/docking">ImGui's dockin
 <br>
 
 ## Showcase
-![img.png](img.png)
-![image.png](image.png)
+<img src="img.png" width="1080">
+<img src="image.png" width="1080">
 
 <br>
 
