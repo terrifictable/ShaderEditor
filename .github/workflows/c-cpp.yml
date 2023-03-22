@@ -1,0 +1,35 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: windows-2022 # idfk
+
+    steps:
+    - name: Clone repo
+      uses: actions/checkout@v3
+    - name: Setup OpenGL
+      uses: openrndr/setup-opengl@v1.1
+    - name: update submodules
+      run: git submodule update --init
+    # - name: configure
+    #   run: ./configure
+    - name: test
+      run: make test
+    - name: compile
+      run: make compile
+
+    - name: rename executable
+      run: mv out/main.exe out/main-${{ steps.vars.output.sha_short }}.exe
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: ShaderEditor ${{ steps.vars.outputs.sha_short }}
+        path: out/
+
